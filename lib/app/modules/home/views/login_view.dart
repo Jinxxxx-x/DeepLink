@@ -40,24 +40,26 @@ class LoginView extends StatelessWidget {
     if (response.statusCode == 200) {
       // A solicitação foi bem-sucedida
       print('Response body: ${response.body}');
+
       //acessando os objetos
       var responseBody = jsonDecode(response.body);
       var userData = responseBody['user'];
 
+      //json
       String emailUsuario = userData['email'];
       String nomeUsuario = userData['username'];
 
-      print('Email do usuário: $emailUsuario, $nomeUsuario');
-
-      // Converter o corpo da resposta em um objeto TokenResponse
-      // Navegue para a próxima tela ou execute as ações necessárias
+      //Navegue para a próxima tela ou execute as ações necessárias
+      //Enviando dados para o perfil
       Get.put(PerfilController(userEmail: emailUsuario, userName: nomeUsuario));
+
+      //Navegaçao para o feed
       Get.toNamed(Routes.home);
     } else {
-      // A solicitação falhou
+      //A solicitação falhou
       print('Erro: ${response.body}');
       Get.snackbar('Erro', 'Credenciais inválidas');
-      // Exiba uma mensagem de erro ou execute as ações necessárias
+      //Exiba uma mensagem de erro ou execute as ações necessárias
     }
   }
 
