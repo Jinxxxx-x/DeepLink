@@ -1,0 +1,43 @@
+fragment UserMe on UserMe {
+  id
+  fullName
+  username
+  email
+  avatar
+}
+
+fragment Report on Report {
+  id
+  title
+  message
+  image {
+    id
+    paths {
+      url
+      size
+    }
+  }
+}
+
+
+query getMe {
+  userMe {
+    ...UserMe
+  }
+}
+
+query listFeed {
+  reportsFeed {
+    edges {
+      node {
+        ...Report
+      }
+    }
+  }
+}
+
+mutation updateMe($userUpdateMeContent: UserUpdateContent!) {
+  userUpdateMe(content: $userUpdateMeContent) {
+    ...UserMe
+  }
+}

@@ -1,0 +1,261 @@
+""" Entidade Asset para midias enviadas """
+type Asset implements Node {
+  createdAt: Date
+  duration: Int!
+  id: ID!
+
+  """Mimetype midia Original"""
+  mimeType: String!
+  paths: [AssetPath!]!
+
+  """Tamanho midia Original"""
+  size: Int!
+  title: String
+  updatedAt: Date
+}
+
+""" Conteudo para criação do asset """
+input AssetCreateContent {
+  duration: Int
+  mimeType: String!
+  title: String
+}
+
+""" Cada Asset terá um caminho para arquivo original, e outros proxy ou thumbnails 
+"""
+type AssetPath {
+  mimeType: String!
+  size: Int!
+  type: AssetPathType!
+  url: String
+}
+
+""" Tipo do caminho da midia, pode ser original, proxy ou thumbnails """
+enum AssetPathType {
+  IMAGE_HIGH
+  IMAGE_LOW
+  IMAGE_MEDIUM
+  ORIGINAL
+  PROXY
+}
+
+"""Campo data, valida e formata campos com esse tipo"""
+scalar Date
+
+""" Dados informativos da API """
+type Info {
+  api: String
+  build_date: String
+  city: String
+  colo: String
+  DEV: String
+  id: ID!
+  last_build: String
+  now: String
+  status: String
+}
+
+"""Entidade para coordenadas"""
+type Location {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  """ Admin aprova relato """
+  adminReportApprove(id: ID!): Report
+
+  """ Admin deletar relato """
+  adminReportDelete(id: ID!): ID
+
+  """ Admin rejeita relato """
+  adminReportReject(id: ID!): Report
+
+  """ Admin atualizar relato """
+  adminReportUpdate(id: ID!): Report
+
+  """Criar asset, necessario criar asset primeiro e entao fazer upload"""
+  assetCreate(content: AssetCreateContent!): Asset!
+
+  """Aborta multipart upload"""
+  assetMultipartUploadAbort(uploadToken: ID!): Boolean
+
+  """Completa multipart upload"""
+  assetMultipartUploadComplete(uploadToken: ID!): Boolean
+
+  """
+  Criar upload token para o asset, retorna token de upload para realizar o upload do arquivo
+  """
+  assetUploadCreate(assetID: ID!, isMultipart: Boolean!, mimeType: String!, type: AssetPathType!): String!
+
+  """ Criar relato """
+  reportCreate(content: ReportCreateContent!): Report!
+
+  """ Deletar relato """
+  reportDelete(id: ID!): ID
+
+  """ Atualizar relato """
+  reportUpdate(id: ID!): Report
+
+  """ Edita dados de usuario autenticado """
+  userUpdateMe(content: UserUpdateContent!): UserMe!
+}
+
+"""Objeto base em comum para todas entidades com ID"""
+interface Node {
+  id: ID!
+}
+
+"""Usado para paginação"""
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type Query {
+  """ Obtem todos os relatos com paginação """
+  adminAllReports(after: ID, before: ID, first: Int, from: Date, last: Int, searchText: String, status: ReportStatus, to: Date): [ReportConnection!]!
+  info: Info
+  ping: String
+
+  """ Feed de relatos aprovados com paginação """
+  reportsFeed(after: ID, before: ID, first: Int, last: Int): ReportConnection!
+
+  """ Obtem dados de usuario autenticado """
+  userMe: UserMe!
+}
+
+""" Entidade de relato """
+type Report implements Node {
+  category: ReportCategory
+  createdAt: Date
+  date: Date
+  id: ID!
+  image: Asset
+  informations: String
+  location: Location
+  message: String
+  status: ReportStatus!
+  title: String!
+  updatedAt: Date
+  user: User
+  video: Asset
+}
+
+"""Categorias do relato"""
+enum ReportCategory {
+  """ Gol Mais Bonito """
+  BEST_GOAL
+
+  """ Comércio """
+  COMMERCE
+
+  """ Cultura """
+  CULTURE
+
+  """ Educação """
+  EDUCATION
+
+  """ Saúde """
+  HEALTH
+
+  """ Infraestrutura """
+  INFRASTRUCTURE
+
+  """ Eventos na Sua Cidade """
+  LOCAL_EVENTS
+
+  """ Esporte local """
+  LOCAL_SPORT
+
+  """ Desaparecido """
+  MISSING
+
+  """ Outros """
+  OTHER
+
+  """ Política """
+  POLITICS
+
+  """ Iluminação Pública """
+  PUBLIC_LIGHTING
+
+  """ Transporte público """
+  PUBLIC_TRANSPORT
+
+  """ Segurança """
+  SAFETY
+
+  """ Ciência / Tecnologia """
+  SCIENCE_TECH
+
+  """ Meio Ambiente e Turismo """
+  TOURISM
+}
+
+"""Resultado Paginação de relatos"""
+type ReportConnection {
+  edges: [ReportEdge!]!
+  pageInfo: PageInfo!
+}
+
+""" Input para criação de relatos """
+input ReportCreateContent {
+  category: ReportCategory
+  date: Date
+
+  """ ID imagem criada """
+  imageID: ID
+  message: String
+
+  """ Titulo relato Obrigatorio """
+  title: String!
+
+  """ ID video criado """
+  videoID: ID
+}
+
+"""Necessario para paginação"""
+type ReportEdge {
+  cursor: String!
+  node: Report!
+}
+
+"""Status Relato"""
+enum ReportStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+""" Entidade User visivel, visivel por outros usuarios """
+type User implements Node {
+  """avatar url"""
+  avatar: String
+  createdAt: Date
+  fullName: String
+  id: ID!
+  updatedAt: Date
+  username: String!
+}
+
+""" Completa entidade User disponivel somente para usuario autenticado """
+type UserMe {
+  """avatar url"""
+  avatar: String
+  createdAt: Date
+  email: String
+  followers: [User]!
+  following: [User]!
+  fullName: String
+  id: ID!
+  updatedAt: Date
+  username: String!
+}
+
+input UserUpdateContent {
+  fullName: String
+  username: String
+}
