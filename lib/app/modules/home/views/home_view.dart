@@ -88,14 +88,22 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      '$userName',
-                      style: TextStyle(color: Colors.black54, fontSize: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userName,
+                          style: TextStyle(color: Colors.black54, fontSize: 16),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 5),
-                    Text(
-                      '$userEmail',
-                      style: TextStyle(color: Colors.black54, fontSize: 13),
+                    Flexible(
+                      child: Text(
+                        userEmail,
+                        style: TextStyle(color: Colors.black54, fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),

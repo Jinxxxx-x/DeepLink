@@ -35,14 +35,14 @@ class PerfilView extends StatelessWidget {
             const SizedBox(height: 16),
             Center(
               child: Text(
-                '$userName',
+                userName,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
             Center(
               child: Text(
-                '$userEmail',
+                userEmail,
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
             ),
@@ -88,6 +88,25 @@ class PerfilView extends StatelessWidget {
                                         backgroundImage: AssetImage(
                                           'images/semperfil.jpg',
                                         ),
+                                      ),
+                                      SizedBox(width: 8.0),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Nome',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Horario da Postagem',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          )
+                                        ],
                                       ),
                                     ],
                                   ),
