@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, unused_local_variable
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -49,7 +49,6 @@ class LoginView extends StatelessWidget {
       String emailUsuario = userData['email'];
       String nomeUsuario = userData['username'];
 
-      //Navegue para a próxima tela ou execute as ações necessárias
       //Enviando dados para o perfil
       Get.put(PerfilController(userEmail: emailUsuario, userName: nomeUsuario));
 
@@ -73,19 +72,19 @@ class LoginView extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 120.0,
+                height: 105.0,
               ),
               Image.asset(
                 'images/logo.png',
                 width: 390.0,
-                height: 250.0,
+                height: 200.0,
                 alignment: Alignment.center,
               ),
               SizedBox(
                 height: 1.0,
               ),
               Text(
-                'TôNaRede',
+                'ToNaRede',
                 style: TextStyle(fontSize: 24.0, fontFamily: 'Brand Bold'),
               ),
               Padding(
@@ -100,7 +99,7 @@ class LoginView extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        labelStyle: TextStyle(fontSize: 14.0),
+                        labelStyle: TextStyle(fontSize: 18.0),
                         hintStyle: TextStyle(
                           color: Colors.grey,
                           fontSize: 10.0,
@@ -110,14 +109,14 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 17.0),
                     TextField(
                       controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                           labelText: 'Senha',
                           labelStyle: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 18.0,
                           ),
                           hintStyle: TextStyle(
                             color: Colors.grey,

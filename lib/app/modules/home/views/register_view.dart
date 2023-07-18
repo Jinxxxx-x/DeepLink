@@ -1,6 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tonarede/app/modules/home/views/login_view.dart';
+import 'package:tonarede/app/routes/app_pages.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -47,7 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Erro'),
+              title: Text('Aviso'),
               content: Text('As senhas não coincidem.'),
               actions: <Widget>[
                 TextButton(
@@ -67,7 +69,7 @@ class _RegisterViewState extends State<RegisterView> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Erro'),
+            title: Text('Aviso'),
             content: Text('Todos os campos são obrigatórios.'),
             actions: <Widget>[
               TextButton(
@@ -90,11 +92,11 @@ class _RegisterViewState extends State<RegisterView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 30.0),
+            SizedBox(height: 15.0),
             Image.asset(
               'images/logo.png',
               width: 500.0,
-              height: 300.0,
+              height: 250.0,
               alignment: Alignment.center,
             ),
             Text(
@@ -159,13 +161,13 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15.0),
+                  SizedBox(height: 18.0),
                   SizedBox(
                     width: 200.0,
                     height: 50.0,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 10,
+                        elevation: 5,
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0),
@@ -177,6 +179,12 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ],
               ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.toNamed(Routes.login);
+              },
+              child: Text("Já tem uma conta? Entre aqui!"),
             ),
           ],
         ),
