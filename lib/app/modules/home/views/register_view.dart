@@ -1,8 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:tonarede/app/modules/home/views/login_view.dart';
 import 'package:tonarede/app/routes/app_pages.dart';
+import 'package:get/get.dart';
+import 'package:tonarede/sucess_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -19,30 +22,92 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  void register() {
-    // Lógica para registro do usuário
-    String firstName = firstNameController.text;
-    String lastName = lastNameController.text;
+  void register() async {
+    String firstname = firstNameController.text;
+    String lastname = lastNameController.text;
     String email = emailController.text;
     String password = passwordController.text;
-    String confirmPassword = confirmPasswordController.text;
+    String password2 = confirmPasswordController.text;
 
     // Exemplo de validação simples
-    if (firstName.isNotEmpty &&
-        lastName.isNotEmpty &&
+    if (firstname.isNotEmpty &&
+        lastname.isNotEmpty &&
         email.isNotEmpty &&
         password.isNotEmpty &&
-        confirmPassword.isNotEmpty) {
+        password2.isNotEmpty) {
       // Verifica se as senhas coincidem
-      if (password == confirmPassword) {
-        // Registro bem-sucedido
-        // Lógica adicional aqui...
+      if (password == password2) {
+        // Chamada da API para registro
+        try {
+          var response = await http.post(
+            Uri.parse('http://192.168.141.61:8000/cadastrar-usuario/'),
+            body: {
+              'first_name': firstname,
+              'last_name': lastname,
+              'email': email,
+              'password': password,
+              'password2': password2,
+            },
+          );
 
-        // Redireciona para a página de login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginView()),
-        );
+          if (response.statusCode == 201) {
+            // Registro bem-sucedido
+            showDialog(
+              context: context,
+              barrierDismissible:
+                  false, // Impede fechar o diálogo clicando fora
+              builder: (BuildContext context) {
+                return SuccessDialog(message: 'Usuário cadastrado!');
+              },
+            );
+
+            //Aguarda 2 segundos antes de redirecionar para LoginView
+            await Future.delayed(Duration(seconds: 3));
+            // Redireciona para a página de login
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginView()),
+            );
+          } else {
+            // Algo deu errado na chamada da API
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Erro'),
+                  content: Text('Não foi possível concluir o registro.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        } catch (e) {
+          // Exceção ocorreu durante a chamada da API
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Erro'),
+                content: Text('Ocorreu um erro durante o registro.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       } else {
         // Senhas não coincidem
         showDialog(
